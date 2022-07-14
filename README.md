@@ -3,9 +3,24 @@ Command line parser of Path of Exile Client log file
   
 # Requirements
 This is currently written for a Windows + Bash (Mingw64) environment. One can install MingW64 through the [git-scm install packages](https://git-scm.com/).
+
+# Install
+Simplest self-install steps
+* [Install git-scm](https://git-scm.com/)
+* Run git-bash   
+> mkdir $HOME/bin
+
+> echo 'export PATH="${PATH}:${HOME}/bin/"' >> $HOME/.bashrc  
+
+> . $HOME/.bashrc  
+
+> curl -s -o $HOME/bin/poeseed https://github.com/TwentyFiveEx/poeseed/releases/latest/download/poeseed  
+
+> chmod -v 755 $HOME/bin/poeseed  
+
+poeseed is now ready to run and in your default path any time you launch a bash shell  
   
 # Usage
-Place poeseed in your path with executable permissions and run poeseed  
   
 > $ poeseed  
 ![poeseed example 1](/assets/images/poeseed-1.png)  

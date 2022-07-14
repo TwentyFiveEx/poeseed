@@ -21,10 +21,10 @@ poeseed is now ready to run and in your default path any time you launch a bash 
   
 # Usage
   
-> $ poeseed  
+```$ poeseed```
 ![poeseed example 1](/assets/images/poeseed-1.png)  
   
-> $ THIST=1000 TRADES=false GCHAT=false SHOWIPS=false poeseed  
+```$ THIST=1000 TRADES=false GCHAT=false SHOWIPS=false poeseed``` 
 ![poeseed example 1](/assets/images/poeseed-2.png)  
   
 # Command Line Options

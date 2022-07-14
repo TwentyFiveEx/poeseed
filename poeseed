@@ -1,0 +1,94 @@
+#!/bin/sh
+
+export poelog='/c/Program Files (x86)/Grinding Gear Games/Path of Exile/logs/Client.txt'
+
+#  Set THIST=n where n is number of lines of Client.txt history to start filter at
+if [ -z "${THIST}" ]; then
+  THIST=1000
+fi
+
+# Set GCHAT=true to enable global chat filter
+if [ -z "${GCHAT}" ]; then
+  GCHAT="false"
+fi
+
+# Set TCHAT=true to enable trade chat filter
+if [ -z "${TCHAT}" ]; then
+  TCHAT="false"
+fi
+
+# Set SHOWIPS=false to disable instance ip output
+if [ -z "${SHOWIPS}" ]; then
+  SHOWIPS="true"
+fi
+
+# Set TRADES=false to disable trade whisper output
+if [ -z "${TRADES}" ]; then
+  TRADES="true"
+fi
+
+/usr/bin/tail -n${THIST} -f "${poelog}" | /usr/bin/gawk -v gchat="${GCHAT}" \
+  -v tchat="${TCHAT}" -v showips="${SHOWIPS}" -v trades="${TRADES}" '{
+  if ($(NF-1)~/seed/) {
+    len=length($NF);
+    res="";
+    if (len>1) {
+      for (i=0;i<=len;i++) {
+        res=substr($NF,len-i+1,1) res;
+        if (i > 0 && i < len && i % 3 == 0) {
+          res = "," res }
+        };
+      gsub($NF, "\033[0;33m"res"\033[0m");
+    }
+    print
+  }
+  else if ( ($0~/] #/) && (gchat=="true") ) {
+    gmatch="] #(.*+): "
+    greplace="] \033[1;92m(G): \\1\033[0m: "
+    gcolor=gensub(gmatch, greplace, 1)
+    globalchat=gensub(gmatch, greplace, 1)
+    print globalchat
+  }
+  else if ( ($0~/] \$/) && (tchat=="true") ) {
+    tmatch="] \\$(.*+): "
+    treplace="] \033[1;93m(T): \\1\033[0m: "
+    tcolor=gensub(tmatch, treplace, 1)
+    tradechat=gensub(tmatch, treplace, 1)
+    print tradechat
+  }
+  else if ( ($0~/] %/) ) {
+    pmatch="] %(.*+): "
+    preplace="] \033[1;96m(P): \\1\033[0m: "
+    pcolor=gensub(pmatch, preplace, 1)
+    partychat=gensub(pmatch, preplace, 1)
+    print partychat
+  }
+  else if ( ( match($0,/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/) ) && (showips=="true") ) {
+    if ($0!~/root:/) {
+      ip = substr($0,RSTART,RLENGTH)
+      print $1,$2,"(\033[1;31m"ip"\033[0m): "$(NF-5),$(NF-4),$(NF-3),$(NF-2),$(NF-1),$NF
+    }
+  }
+  else if ( ( ($0~/Abnormal disconnect:/) || 
+            ($0~/Connected to.*ms./) || 
+            ($0~/from login server/) || 
+            ($0~/Async connecting to/) ) && (showips=="true") ) { 
+    print "\033[0;34m"$0"\033[0m"
+  }
+  else if ($0~/have entered /) {
+    matcher="have entered (.*+)"
+    replacer="have entered \033[1;33m\\1\033[0m"
+    color=gensub(matcher, replacer, 1)
+    sub(matcher, color)
+    print color
+  }
+  else if ( ( $0~/] @From/ ) && (trades=="true") ) {
+    matcher="] @From (.*+): Hi,"
+    replacer="] @From\n\033[1;31m\\1\033[0m: Hi,"
+    fromcolor=gensub(matcher, replacer, 1)
+    matcher="your (.*+) listed for (.*+) in (\\w+)"
+    replacer="your \033[0;36m\\1\033[0m listed for \033[1;32m\\2\033[0m in \033[0;34m\\3\033[0m"
+    buycolor=gensub(matcher, replacer, 1, fromcolor)
+    print buycolor
+  }
+}'

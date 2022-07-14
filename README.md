@@ -2,7 +2,7 @@
 Command line parser of Path of Exile Client log file
   
 # Requirements
-This is currently written for a Windows + Bash (Mingw64) environment. One can install MingW64 through the [git-scm install packages](https://git-scm.com/).
+This is currently written for a Windows + Bash (Mingw64) environment. One can install MingW64 through the [git-scm install packages](https://git-scm.com/). This might run under Linux, by adjusting the Client.txt file location (maybe..?).
 
 # Install
 Simplest self-install steps

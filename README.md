@@ -7,16 +7,15 @@ This is currently written for a Windows + Bash (Mingw64) environment. One can in
 # Install
 Simplest self-install steps
 * [Install git-scm](https://git-scm.com/)
-* Run git-bash   
-> mkdir $HOME/bin
-
-> echo 'export PATH="${PATH}:${HOME}/bin/"' >> $HOME/.bashrc  
-
-> . $HOME/.bashrc  
-
-> curl -s -o $HOME/bin/poeseed https://github.com/TwentyFiveEx/poeseed/releases/latest/download/poeseed  
-
-> chmod -v 755 $HOME/bin/poeseed  
+* Run git-bash
+   
+```
+mkdir $HOME/bin
+echo 'export PATH="${PATH}:${HOME}/bin/"' >> $HOME/.bashrc
+. $HOME/.bashrc
+curl -s -o $HOME/bin/poeseed https://github.com/TwentyFiveEx/poeseed/releases/latest/download/poeseed
+chmod -v 755 $HOME/bin/poeseed
+```
 
 poeseed is now ready to run and in your default path any time you launch a bash shell  
   
